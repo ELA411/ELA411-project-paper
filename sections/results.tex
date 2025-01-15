@@ -1,0 +1,153 @@
+\section{Results}
+%-------------------------------------------------------------------------------------------------------------
+% Offline
+
+% Accuracy
+\textcolor{violet}{The cross validation accuracy of the classifiers for the subjects is shown in Table.\:\ref{tab:classifier_accuracy}, together with average and standard deviation.}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			Cross validated accuracy         & EEG                   & EMG                   \\
+			\hline
+			$\text{s}_1$ (\%)                & $49.31 \pm 2.48$      & $36.60 \pm 2.29$      \\
+			$\text{s}_2$ (\%)                & $52.36 \pm 2.83$      & $77.46 \pm 3.14$      \\
+			$\text{s}_3$ (\%)                & $49.23 \pm 3.85$      & $73.80 \pm 1.93$      \\
+			Average (\%)                     & $50.30 \pm 1.78$      & $62.62 \pm 22.61$     \\
+			\hline
+		\end{tabular}
+	\caption{Cross validation accuracy for EEG and EMG classifiers for each subject during offline training, together with average and standard deviation.}
+	\label{tab:classifier_accuracy}
+\end{table}
+
+% Permutation test
+\textcolor{violet}{The p-values of the permutation test $1$ is shown in Table.\:\ref{tab:classifier_test1} and for permutation test $2$ is shown in Table.\:\ref{tab:classifier_test2}, both also containing the average calculated over all subjects and the standard deviation.}
+% Test 1
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			Cross validated accuracy         & EEG                   & EMG                       \\
+			\hline
+			$\text{s}_1$                     & $0.91$                & $0.0099$                  \\
+			$\text{s}_2$                     & $0.95$                & $0.0099$                  \\
+			$\text{s}_3$                     & $0.23$                & $0.0099$                  \\
+			Average                          & $0.70 \pm 0.40$       & $0.0099 \pm 0.0000$       \\
+			\hline
+		\end{tabular}
+	\caption{EEG and EMG classifier permutation test $1$ p-values for each subject during offline training, together with average and standard deviation.}
+	\label{tab:classifier_test1}
+\end{table}
+% Test 2
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			Cross validated accuracy         & EEG                   & EMG                    \\
+			\hline
+			$\text{s}_1$                     & $0.72$                & $0.02$                 \\
+			$\text{s}_2$                     & $0.079$               & $0.0099$               \\
+			$\text{s}_3$                     & $0.85$                & $0.0099$               \\
+			Average                          & $0.55 \pm 0.41$       & $0.013 \pm 0.0058$     \\
+			\hline
+		\end{tabular}
+	\caption{EEG and EMG classifier permutation test $2$ p-values for each subject during offline training, together with average and standard deviation.}
+	\label{tab:classifier_test2}
+\end{table}
+
+% Binomial test
+\textcolor{violet}{The p-values for the binomial test of the EEG classifiers is shown in Table.\:\ref{tab:classifier_test_binomial}, as well as the average over all subjects and the standard deviation.}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			Cross validated accuracy         & EEG                     \\
+			\hline
+			$\text{s}_1$                     & $0.72$                  \\
+			$\text{s}_2$                     & $0.88$                  \\
+			$\text{s}_3$                     & $0.44$                  \\
+			Average                          & $0.68 \pm 0.22$         \\
+			\hline
+		\end{tabular}
+	\caption{EEG classifier binomial test p-values for each subject during offline training, together with average and standard deviation.}
+	\label{tab:classifier_test_binomial}
+\end{table}
+
+% Confusion matrices
+\textcolor{violet}{The confusion matrices calculated from the mean of all trained classifiers can be seen in Table.\:\ref{tab:confusion_matrix_rbfsvm} for the EEG classifiers, and Table.\:\ref{tab:confusion_matrix_lda} for the EMG classifiers.}
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% Definitions etc for the confusion matrices
+\def\colorModel{hsb} %You can use rgb or hsb
+
+\newcommand\ColCell[1]{
+	\pgfmathparse{#1<500?1:0}  %Threshold for changing the font color into the cells
+	\ifnum\pgfmathresult=0\relax\color{white}\fi
+	\pgfmathsetmacro\compA{0}      %Component R or H
+	\pgfmathsetmacro\compB{#1/100} %Component G or S (change red intensity)
+	\pgfmathsetmacro\compC{1}      %Component B or B
+	\edef\x{\noexpand\centering\noexpand\cellcolor[\colorModel]{\compA,\compB,\compC}}\x #1
+}
+\newcolumntype{E}{>{\collectcell\ColCell}m{1.5cm}<{\endcollectcell}}  %Cell width
+\newcommand*\rot{\rotatebox{90}}
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\begin{table}
+	\centering
+	\newcommand\items{2}    %Number of classes
+	\arrayrulecolor{white}  %Table line colors
+	\def\arraystretch{2.35} %Row height
+	\begin{tabular}{cc*{\items}{|E}|}
+		\multicolumn{1}{c}{}              & \multicolumn{1}{c}{} & \multicolumn{\items}{c}{Predicted class}      \\ \hhline{~*\items{|-}|}
+		\multicolumn{1}{c}{}              &
+		\multicolumn{1}{c}{}              &
+		\multicolumn{1}{c}{\rot{Class 0}} &
+		\multicolumn{1}{c}{\rot{Class 1}}                                                                        \\ \hhline{~*\items{|-}|}
+		\multirow{\items}{*}{\rotatebox{90}{Actual class}}
+		                                  & Class 0              & 21                                       & 27 \\ \hhline{~*\items{|-}|}
+		                                  & Class 1              & 24                                       & 28 \\ \hhline{~*\items{|-}|}
+	\end{tabular}
+	\caption{Confusion matrix for the EEG classifiers, RBF SVM, shown in percentage (\%). Calculated as the average of all EEG classifiers.}
+	\label{tab:confusion_matrix_rbfsvm}
+\end{table}
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\begin{table}
+	\centering
+	\newcommand\items{3}   %Number of classes
+	\arrayrulecolor{white} %Table line colors
+	\def\arraystretch{1.6} %Row height
+	\resizebox{\columnwidth}{!}{\noindent\begin{tabular}{cc*{\items}{|E}|}
+			\multicolumn{1}{c}{}              & \multicolumn{1}{c}{} & \multicolumn{\items}{c}{Predicted class}               \\ \hhline{~*\items{|-}|}
+			\multicolumn{1}{c}{}              &
+			\multicolumn{1}{c}{}              &
+			\multicolumn{1}{c}{\rot{Class 0}} &
+			\multicolumn{1}{c}{\rot{Class 1}} &
+			\multicolumn{1}{c}{\rot{Class 2}}                                                                                 \\ \hhline{~*\items{|-}|}
+			\multirow{\items}{*}{\rotatebox{90}{Actual class}}
+			                                  & Class 0              & 22                                     & 8  & 5  \\ \hhline{~*\items{|-}|}
+			                                  & Class 1              & 7                                      & 21 & 3  \\ \hhline{~*\items{|-}|}
+			                                  & Class 2              & 4                                      & 5  & 25 \\ \hhline{~*\items{|-}|}
+		\end{tabular}}
+	\caption{Confusion matrix for the EMG classifiers, pseudolinear LDA, shown in percentage (\%). Calculated as the average of all EMG classifiers.}
+	\label{tab:confusion_matrix_lda}
+\end{table}
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+%-------------------------------------------------------------------------------------------------------------
+% Online
+
+\textcolor{violet}{The average response time for EEG was $237.66 \pm 2.52 \: \text{ms}$, and for EMG it was $416.66 \pm 17.90 \: \text{ms}$.}
+\textcolor{violet}{A usability test was not applicable since the online predictions made by the trained classifiers were completely random and unreliable, and thus no control over the system could be exerted using EEG or EMG.}
+
+%-------------------------------------------------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------------------------------------------------
+\begin{comment}
+1) signals should be visualized/plotted “in real time”,
+2) data quality should be discussed/demonstrated, and
+3) amount of data drop (i.e. lost data) should be showed.
+
+verification and validation using a statistical measure.
+
+This section should present answers to all research questions.
+\end{comment}
+%-------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,82 @@
+\section{Discussion}
+\label{section:discussion}
+%-------------------------------------------------------------------------------------------------------------
+% Results
+
+% Offline results
+% EEG results
+\textcolor{violet}{Both the offline and online EEG results are unreliable and indicates nothing except random chance. Even the dataset where actual right hand closing was done, did not achieve above random chance results, thus it was established that some part of the method was insufficient for acquiring any type of EEG signal containing any information. The processing methods chosen were based on prior research which had achieved good results (see Introduction\:\ref{section:intro}), it was therefore assumed that either the limitations mentioned below had a large impact or that the hardware equipment was not good enough to acquire an EEG signal containing any information. This was further supported by the results of the statistical tests for EEG. Permutation test $1$ and the binomial test indicates that non of the EEG classifiers performed above random chance, and permutation test $2$ indicates that non of the EEG classifiers found any structure in the data. The feature extraction methods for EEG might also have contributed since this was the area which was the least documented in all literature found and reviewed.}
+
+% EMG Results
+\textcolor{violet}{The results show that even though the EMG achieved good results offline, in terms of accuracy, confusion matrices and statistical tests, it did not translate to online trials. The statistical tests indicate that the EMG classifiers performed above random chance and that significant structure in the data was found. Given this, the following possibilities were identified as possible explanations of the poor online performance:
+\begin{itemize}
+    \item Unidentified miss match between offline and online processing, this includes certain processing steps not being transferable to online circumstances
+    \item \textcolor{teal}{The data collected online contained a lot more noise compared to the offline data despite using the same code. This problem stems from Matlabs inability to run real-time programs, and running several processes concurrently most probably interfered with the sampling process.}
+\end{itemize}
+}
+
+% Online results
+% Various users
+\textcolor{violet}{The systems online performance was unreliable to the point were no control could be exerted on the system and thus the system naturally fails the demand for the system to work for various users.}
+% Response time
+\textcolor{violet}{The real-time demands of less than $1\:\text{s}$ deadline was met during online trials.}
+
+%-------------------------------------------------------------------------------------------------------------
+% Limitations and flaws
+
+% EEG electrodes
+\textcolor{teal}{The impedance reported in this study was unable to reach recommended levels ($ 5-10\: \text{k}\Omega$)\:\cite{goreckaDependenceElectrodeImpedance2019}. Since it was not known how many times the gold plated electrodes had been used and cleaned, a proper inspection should take place making sure the gold coating on each electrode has no scratches or other types of damage causing degradation, which would have a significant impact on the impedance\:\cite{goreckaDependenceElectrodeImpedance2019}.}
+% Different channel impedance
+\textcolor{teal}{This could be an explanation as to why the impedance levels could not reach equal impedance on all electrodes resulting in inconsistent signal amplitudes, noise and artifacts between the electrodes.}
+% EEG channels
+\textcolor{violet}{The hardware used in this study limited the number of EEG channels to four channels. This is far below the common number of channels used\:\textcolor{teal}{\cite{zhouSignalPredictionbasedMethod2023}\cite{blankertzBCICompetitionIII2006}}. This is expected to have negatively affected the signal quality and some performance loss can be expected from this factor.}
+% Cap/band
+\textcolor{teal}{There was no head-cap available to put the EEG electrodes under pressure, because of this the electrodes were prone to unintended movements and coming loose. The usage of head straps was not optimal since the electrode positions used (see Table.\:\ref{tab:eeg_dataset}) was to widely spread out resulting in the head strap unable to put pressure on all of the electrodes, it also caused significant discomfort for the subject.}
+% SA
+\textcolor{teal}{SA could not be performed due to the authors not having the required medical training, and the risk for infection. The study by Lepola \textit{et al.} indicated that performing SA before applying the electrodes showed significant decrease in impedance compared with not using SA\:\cite{lepolaScreenprintedEEGElectrode2014}.}
+\textcolor{teal}{Because of the high-impedance in this study, the signals were susceptible to baseline drift, increased noise, and an overall worsened signal quality.}
+
+% EMG reference
+\textcolor{violet}{Two different EMG references were used, one for each bipolar EMG electrode set (channel), a limitation of the hardware. This increases noise and provides worse quality signals.}
+% EMG grove connectors
+\textcolor{teal}{The Grove EMG sensor was connected using jumper wires connected to a JST female connector, which potentially could be a contributor to noise in the signal.}
+% Force levels
+\textcolor{olive}{A previous study suggests using different muscular forces while extracting EMG movements\:\cite{vidovicImprovingRobustnessMyoelectric2016}. 
+when performing flexion and extension with different force levels, the accuracy was reduced significantly, compared to using only full force. So it resulted in using full force for all movements while sampling EMG.}
+
+% Noise and artifacts
+\textcolor{violet}{One limitation of this study was the inadequate way in which noise and artifacts were dealt with, especially for EEG. The Notch filter should optimally have been replaced with other methods like time domain regression-based approaches, since Notch filters damages the signal\:\cite{widmannDigitalFilterDesign2015}. The use of a bandpass filter for the EEG signal was not ideal but had to be included because of the use of log band power which assumes the signal has been bandpass filtered\:\cite{blankertzOptimizingSpatialFilters2008}. Preferably only a highpass filter would have been used since lowpass filtering is generally advised against in EEG\:\cite{vanrullenFourCommonConceptual2011}\cite{widmannDigitalFilterDesign2015}. However, the use of a higpass filter for the EEG signal was also flawed. Removal of the DC offset can be done by removing the mean value from the signal\:\cite{islamSignalArtifactsTechniques2021}, however no method was found (in the limited time) for removing the baseline wandering from the EEG signal.}
+\textcolor{violet}{Additionally, a problem was encountered where the w-ICA (\href{https://se.mathworks.com/matlabcentral/fileexchange/55413-wica-data-varargin}{wICA(data,varargin)}) would crash in online trials and thus it had to be excluded. It is regretted that the w-ICA could not be included since it has been a promising technique for online artifact removal\:\cite{islamSignalArtifactsTechniques2021}\textcolor{olive}{\cite{minguillonTrendsEEGBCIDailylife2017}}\cite{dalyFORCeFullyOnline2015}\cite{gabard-durnamHarvardAutomatedProcessing2018}.}
+\textcolor{violet}{Additionally, all noise and artifacts sources could not be investigated and properly dealt with because of the limited time for this study.}
+
+% Subject demographic and dataset
+\textcolor{violet}{Another limitation is the demographic of the subjects and the population size. The system was only tested on subjects of the same sex, same background and a very short span of ages. The system is supposed to work for various users and the very limited demographic of the subjects provides very biased results.}
+\textcolor{violet}{Because of the limited time for this study, proper investigation of the optimal EEG electrode positions when using only four electrodes could not be conducted, and the EEG electrode positions used should not be considered optimal. Some other electrode locations were tested, however with less success, these were: $\text{C}3$, $\text{CP}3$, $\text{C}4$, $\text{CP}4$ and $\text{C}3$, $\text{C}4$, $\text{T}7$, $\text{T}8$. The EEG sampling rate used should not be considered ideal either since $500-512\:\text{Hz}$ is the more common sampling rate for EEG\:\cite{leebHybridBrainComputer2011}\cite{gordleevaRealTimeEEGEMG2020}\cite{zhangEEGEMGEOGBased2019}. The low sampling rate used, at only $200\:\text{Hz}$, could thus have contributed to the poor performance of the EEG part of the BCI.}
+
+% Why are the data sets of different number of samples, what impact can this have?
+\textcolor{olive}{While recording training data, a later found problem was that some training sets did not have an equal number of samples. Despite being recorded for the same amount of time. This problem affected subject $\text{s}_1$ and could be a reason for its low accuracy for EMG. This may have been reduced if error conditions were implemented while sampling.}
+
+% CSP W matrix
+\textcolor{violet}{The way in which CSP was employed was flawed. Optimally, CSP filtering and acquisition of the CSP W matrix would occur individually for each window. However because of the limitations of the toolbox used, this could not be done. Therefor, the CSP W matrix had to be calculated from the entire offline signal and then saved to be employed on each window and for online trials later. This would only be acceptable under the assumption that the signal is stationary, however EEG MI signals are non-stationary\:\cite{tyagiTimeFrequencyAnalysis2017}. This flaw is assumed to have seriously affected both offline and online performance.}
+
+% Classifier
+\textcolor{violet}{The LDA classifier parameters should have been updated by adapting the parameters when new data is obtained\:\cite{vidovicImprovingRobustnessMyoelectric2016} or implementing the LDA as a shrinkage LDA\:\cite{lotteReviewClassificationAlgorithms2018}. Regretfully, the limited time did not allow for sufficient resources to implement this.}
+
+% Statiscial tests
+\textcolor{violet}{The statistical tests employed in this report has some cause for concern, with binomial tests being the most obvious one. Binomial tests have been found to provide biased results of significance and to be less reliable than permutation tests\:\cite{noirhommeBiasedBinomialAssessment2014}. Binomial tests have also been found to be either to conservative or to liberal, and to also be dependent on the class balance and the data size\:\cite{ganzPermutationTestsClassification2017}. However, permutation tests has also been found to be flawed, certain permutation tests have been noted to always provide low p-values\:\cite{ojalaPermutationTestsStudying2009}. This was noted in this study as well, when provided with data containing only noise, sometimes permutation test $2$ found significant results whereas non of the other statistical tests did.}
+
+% Real time validation
+\textcolor{violet}{This study, much like other studies, is in need of a proper method for real-time validation of the classifier and the results\:\cite{khoslaComparativeAnalysisSignal2020}.}
+% Signal quality
+\textcolor{violet}{A proper measure of the quality of the signal is also lacking.}
+
+%-------------------------------------------------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------------------------------------------------
+\begin{comment}
+discuss your BMI system and test case results with reference to other scientific work.
+
+Here you can discuss your results, limitations and new questions that have arose while doing the work. Depending on the size of this report, you can present discussion and conclusion in one common section or in two separate ones.
+\end{comment}
+%-------------------------------------------------------------------------------------------------------------

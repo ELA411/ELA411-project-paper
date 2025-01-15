@@ -1,0 +1,111 @@
+\section{Introduction}
+\label{section:intro}
+%-------------------------------------------------------------------------------------------------------------
+
+% Purpose
+\textcolor{violet}{This study covers the online control of a \href{https://github.com/ROBOTIS-GIT/turtlebot3}{Turtlebot3} using a hybrid brain computer interface (BCI). A BCI allows for control of a computer and interaction with external devices by neurological signals\:\cite{lotteReviewClassificationAlgorithms2018}\cite{fouadBrainComputerInterface2015}. EEG is considered the only practical non invasive option for obtaining neurological signals in real-time BCI systems\:\cite{fouadBrainComputerInterface2015}. A hybrid BCI uses more than one form of communication, with at least one originating from the brain\:\cite{leebHybridBrainComputer2011}\cite{hongHybridBrainComputer2017}. The hybrid BCI developed in this study used both EEG and EMG. EEG was used to control drive forward and do not drive commands. EMG was used to control turn left and turn right commands. The control of the \href{https://github.com/ROBOTIS-GIT/turtlebot3}{Turtlebot3} was built using \href{https://docs.ros.org/en/humble/index.html}{ROS2} and was simulated in \href{https://gazebosim.org/home}{Gazebo}.}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% EEG
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+% MI
+\textcolor{violet}{Motor imagery (MI) is connected with event-related desynchronization (ERD)\:\cite{gordleevaRealTimeEEGEMG2020}. By imagining performing a certain movement, a certain drop in potential (ERD) or pattern in the EEG signal can be obtained and used by a classifier to learn to recognize that certain movement\:\cite{gordleevaRealTimeEEGEMG2020}\cite{blankertzOptimizingSpatialFilters2008}.}
+\textcolor{olive}{Common MI gestures are hands, feet and tongue\:\cite{tangSpatialFilterTemporal2024}.}
+\textcolor{violet}{Foot MI are more difficult to classify than hand MI\:\cite{gordleevaRealTimeEEGEMG2020}.}
+\textcolor{teal}{The signals recorded are typically divided into five frequency ranges, $0.1<\delta<3.5-4\:\text{Hz}$, $4\:\text{Hz}<\theta<7-8\:\text{Hz}$, $7-8\:\text{Hz}<\alpha<12-13\:\text{Hz}$, $12-14\:\text{Hz}<\beta<30\:\text{Hz}$, and $\gamma > 30\:\text{Hz}$\:\textcolor{violet}{\cite{khoslaComparativeAnalysisSignal2020}\cite{minguillonTrendsEEGBCIDailylife2017}\cite{mannanIdentificationRemovalPhysiological2018}}\cite{padfieldEEGBasedBrainComputerInterfaces2019}.}
+\textcolor{teal}{The activity from $\alpha \: \text{and} \: \beta$ are commonly used to identify MI tasks\:\cite{padfieldEEGBasedBrainComputerInterfaces2019}\cite{liHybridBrainMuscle2019}.}
+
+% Electrode placement
+\textcolor{violet}{A common choice for EEG electrode placement is the $10-20$ system\:\cite{fouadBrainComputerInterface2015}\cite{zhangEEGEMGEOGBased2019}.}
+\textcolor{violet}{One study placed EEG electrodes over the motor cortex\:\cite{leebHybridBrainComputer2011}.}
+\textcolor{violet}{Typical placement of the reference electrode is the earlobes\:\cite{gordleevaRealTimeEEGEMG2020}\cite{zhangEEGEMGEOGBased2019}.}
+\textcolor{teal}{The common number of channels used for evaluating MI is $ 19 - 64 $ channels\:\cite{zhouSignalPredictionbasedMethod2023}. Datasets commonly used in studies has channel numbers ranging from $ 32 - 118 $ channels\:\cite{blankertzBCICompetitionIII2006}.}
+
+% Impedance
+\textcolor{teal}{The impedance for each electrode should be below $ 10\:\text{k} \Omega $ to be clinically acceptable\:\cite{lepolaScreenprintedEEGElectrode2014}\cite{sinisaloSurePrepEasyAlternative2012}\cite{goreckaDependenceElectrodeImpedance2019}. But values below $ 5\:\text{k} \Omega $ is recommended\:\cite{goreckaDependenceElectrodeImpedance2019}.}
+\textcolor{teal}{The impedance should be equal across all electrodes on the scalp\:\cite{goreckaDependenceElectrodeImpedance2019}.}
+\textcolor{teal}{To achieve low impedance, skin abration (SA) can be used\:\cite{lepolaScreenprintedEEGElectrode2014}\cite{sinisaloSurePrepEasyAlternative2012}\cite{goreckaDependenceElectrodeImpedance2019}\cite{liGelfreeElectrodesSystematic2017}}
+\textcolor{teal}{and the EEG electrodes should be put under pressure when placed on the scalp using either a strap or cap\:\cite{raduntzSignalQualityEvaluation2018}\cite{liGelfreeElectrodesSystematic2017}.}
+\textcolor{teal}{The wear of the electrodes should be taken into account, especially when using gold plated EEG electrodes\:\cite{goreckaDependenceElectrodeImpedance2019}. Usage after $10$ different test runs results in significant impedance degradation\:\cite{goreckaDependenceElectrodeImpedance2019}.}
+
+% Signal acquisition
+\textcolor{olive}{While recording a dataset, it is common to have $4$ seconds MI\:\textcolor{violet}{\cite{blankertzOptimizingSpatialFilters2008}\textcolor{teal}{\cite{petersonMotorImageryVs2022}}}, and around $2$ seconds rest\:\cite{tangermannReviewBCICompetition2012}. Sometimes the rest is of a random duration between \textcolor{teal}{$2.5-4.5$ seconds\:\cite{petersonMotorImageryVs2022}}. One trial run usually consists of $40-60$ repetitions of each MI\:\cite{blankertzBCICompetitionIII2006}.}
+
+% Filter
+\textcolor{violet}{EEG signals are very prone to noise and artifact contamination\:\cite{islamSignalArtifactsTechniques2021}. Common types of noise in EEG signals include: white noise, baseline wandering, $1/f^\alpha$ noise ($\alpha \in \{1,2,3\}$), power line noise and electrode offset\:\cite{islamSignalArtifactsTechniques2021}. Common sources of artifacts in EEG signals include: ocular (EOG), muscle (EMG), cardiac (ECG and pulse artifacts), respiration, sweat and electrodes (loose, movement, shift etc)\:\cite{islamSignalArtifactsTechniques2021}\cite{khoslaComparativeAnalysisSignal2020}\cite{minguillonTrendsEEGBCIDailylife2017}\cite{mannanIdentificationRemovalPhysiological2018}\cite{pedroniAutomagicStandardizedPreprocessing2019}.}
+\textcolor{violet}{It is common to remove the $50\:\text{Hz}$ power line noise from the EEG with a notch filter\:\cite{gordleevaRealTimeEEGEMG2020}\cite{khoslaComparativeAnalysisSignal2020}\cite{zhangEEGEMGEOGBased2019}. One study recommends the use of a $3$rd or $4$th order IIR notch filter\:\cite{islamSignalArtifactsTechniques2021}. Removing the second and third harmonic can also be done\:\cite{islamSignalArtifactsTechniques2021}. Proper grounding should also be employed to properly deal with the $50\:\text{Hz}$ power line noise and its harmonics\:\cite{islamSignalArtifactsTechniques2021}.}
+\textcolor{violet}{Some studies remove the baseline wandering and DC offset from the EEG signal\:\cite{islamSignalArtifactsTechniques2021}\cite{zhangEEGEMGEOGBased2019}.}
+\textcolor{violet}{The EEG frequency range of interest is roughly $0.01$ to $128\:\text{Hz}$\:\cite{islamSignalArtifactsTechniques2021}\cite{mannanIdentificationRemovalPhysiological2018}.}
+\textcolor{violet}{Some studies used $0.01-1$ to $70-100\:\text{Hz}$ bandpass filters\:\cite{leebHybridBrainComputer2011}\textcolor{olive}{\cite{tangSpatialFilterTemporal2024}}\cite{khoslaComparativeAnalysisSignal2020}.}
+\textcolor{violet}{It is recommended to keep the high pass cut off frequency at or below $0.1\:\text{Hz}$ and the low pass cut off frequency above $40\:\text{Hz}$, however, low pass filtering is mainly cosmetic since higher frequencies have low energy and thus some recommend not using lowpass filters\:\cite{vanrullenFourCommonConceptual2011}\cite{widmannDigitalFilterDesign2015}.}
+
+% Artifact Removal
+\textcolor{violet}{Independent component analysis (ICA) has been suggested as a good method for removing EOG, EMG and ECG artifacts from EEG\:\cite{hongHybridBrainComputer2017}\textcolor{olive}{\cite{minguillonTrendsEEGBCIDailylife2017}}\cite{mannanIdentificationRemovalPhysiological2018}.}
+\textcolor{violet}{Another common method for removing artifacts from EEG signals is wavelet enhanced ICA (W-ICA), which has shown good online performance\:\cite{islamSignalArtifactsTechniques2021}\textcolor{olive}{\cite{minguillonTrendsEEGBCIDailylife2017}}\cite{dalyFORCeFullyOnline2015}\cite{gabard-durnamHarvardAutomatedProcessing2018}.}
+
+% Feature extraction
+\textcolor{violet}{Common spatial pattern (CSP) is a feature extraction method with good success in BCI systems\:\cite{gordleevaRealTimeEEGEMG2020}\cite{blankertzOptimizingSpatialFilters2008}, however power spectral density (PSD) is another common option\:\cite{fouadBrainComputerInterface2015}.}
+\textcolor{violet}{One review states that band power features are the golden standard for MI in BCI systems and CSP is dedicated to band power features\:\cite{lotteReviewClassificationAlgorithms2018}.}
+\textcolor{teal}{CSP has good performance when it comes to detection of MI that uses several channels of data\:\cite{kevricComparisonSignalDecomposition2017}.}
+\textcolor{violet}{A common feature extracted from CSP, which has performed well, is the log band power\:\cite{fouadBrainComputerInterface2015}\cite{blankertzOptimizingSpatialFilters2008}\cite{aljalalFeatureExtractionEEG2018}. Log band power assumes that the signal has already been band pass filtered\:\cite{blankertzOptimizingSpatialFilters2008}.}
+
+% Classifier
+\textcolor{violet}{Support vector machine (SVM) is a commonly used classifier for EEG signals and has found good success\:\cite{hongHybridBrainComputer2017}\cite{khoslaComparativeAnalysisSignal2020}\cite{zhangEEGEMGEOGBased2019}, specifically RBF SVM\:\cite{fouadBrainComputerInterface2015}.}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% EMG
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+% Electrode placement
+\textcolor{violet}{For recognizing hand and wrist movements, EMG electrodes have typically been placed around the forearm\:\cite{leebHybridBrainComputer2011}\cite{zhangEEGEMGEOGBased2019}\cite{farinaExtractionNeuralInformation2014}\cite{youngClassificationSimultaneousMovements2013}\cite{liQuantifyingPatternRecognition2010}.}
+\textcolor{violet}{One common placement of the reference electrode is on the elbow\:\cite{youngClassificationSimultaneousMovements2013}\cite{youngImprovingMyoelectricPattern2012}.}
+\textcolor{violet}{Interelectrode distance (distance between two electrode poles) for EMG should be less than $2\:\text{cm}$ to minimize muscle cross talk\:\cite{youngImprovingMyoelectricPattern2012}. However, interelectrode distance of $4\:\text{cm}$ has shown to give lower classification errors, be more resistant to electrode shift and lower failure rates\:\cite{youngImprovingMyoelectricPattern2012}.}
+\textcolor{violet}{When more than two channels are used, at least one should be placed longitudinally and one transverse to the muscle for better performance and resistance to electrode shift\:\cite{youngImprovingMyoelectricPattern2012}.}
+
+% Signal acquisition
+\textcolor{violet}{EMG movements are typcially held for $3-4\:\text{s}$\:\cite{youngClassificationSimultaneousMovements2013}\cite{liQuantifyingPatternRecognition2010}\cite{youngImprovingMyoelectricPattern2012}.}
+\textcolor{olive}{It is common for each EMG dataset to consist of $30$ to $40$ repetitions for each movement\:\cite{severiniEffectSNRNormalization2018}\cite{turgunovNewDatasetDetection2020}.}
+% Sample rate
+\textcolor{violet}{EMG is typically sampled with a sample rate of $1000\:\text{Hz}$\:\cite{youngClassificationSimultaneousMovements2013}\cite{liQuantifyingPatternRecognition2010}\cite{youngImprovingMyoelectricPattern2012}\cite{vidovicImprovingRobustnessMyoelectric2016}.}
+% Window size
+\textcolor{violet}{A very common window size for EMG signals is $250\:\text{ms}$ with $50\:\text{ms}$ overlap\:\cite{youngClassificationSimultaneousMovements2013}\cite{youngImprovingMyoelectricPattern2012}\cite{vidovicImprovingRobustnessMyoelectric2016}.}
+
+% Filter
+\textcolor{violet}{It is common to use a $50\:\text{Hz}$ notch filter to remove powerline noise from the EMG signal\:\cite{vidovicImprovingRobustnessMyoelectric2016}.}
+\textcolor{violet}{The EMG frequency range of interest is $20$ to $1000\:\text{Hz}$\:\cite{islamSignalArtifactsTechniques2021}.}
+\textcolor{violet}{Bandpass filters with $5-20\:\text{Hz}$ to $400-500\:\text{Hz}$ are typically used for EMG signals\:\cite{liQuantifyingPatternRecognition2010}\cite{vidovicImprovingRobustnessMyoelectric2016}.}
+
+% Feature extraction
+\textcolor{violet}{Time domain autoregressive (TDAR) has been found to be a good feature extraction method for EMG in terms of classification error when electrode shift is present in the EMG signal and has shown good real-time performance\:\cite{youngImprovingMyoelectricPattern2012}.}
+\textcolor{violet}{Common time domain features for EMG include: mean absolute value, waveform length, zero crossing and slope sign change\:\cite{zhangEEGEMGEOGBased2019}\cite{youngClassificationSimultaneousMovements2013}\cite{liQuantifyingPatternRecognition2010}.}
+
+% Classifier
+\textcolor{violet}{LDA is a robust and commonly used classifier for EMG signals\:\cite{liQuantifyingPatternRecognition2010}\cite{youngImprovingMyoelectricPattern2012}\cite{vidovicImprovingRobustnessMyoelectric2016}. LDA has also been found to perform well in the presence of electrode shift\:\cite{youngImprovingMyoelectricPattern2012}.}
+
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% Other stuff
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+% Statistical tests
+\textcolor{violet}{One suggested statistical test for evaluation of classifiers is a permutation test\:\cite{ganzPermutationTestsClassification2017}\cite{ojalaPermutationTestsStudying2009}\cite{noirhommeBiasedBinomialAssessment2014}. Permutation tests have been found to not be biased for cross validation schemes and are thus a good option\:\cite{noirhommeBiasedBinomialAssessment2014}.}
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+%-------------------------------------------------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------------------------------------------------
+\begin{comment}
+Avoid contractions, write ``do not'' instead of ``don't.''
+
+The word ``data'' is plural, not singular. The subscript for the permeability of vacuum $\mu _{0}$ is zero, not a lowercase letter ``o.'' The term for residual magnetization is ``remanence''; the adjective is ``remanent''; do not write ``remnance'' or ``remnant.'' Use the word ``micrometer'' instead of ``micron.'' A graph within a graph is an ``inset,'' not an ``insert.'' The word ``alternatively'' is preferred to the word ``alternately'' (unless you really mean something that alternates). Use the word ``whereas'' instead of ``while'' (unless you are referring to simultaneous events). Do not use the word ``essentially'' to mean ``approximately'' or ``effectively.'' Do not use the word ``issue'' as a euphemism for ``problem.'' When compositions are not specified, separate chemical symbols by en-dashes; for example, ``NiMn'' indicates the intermetallic compound Ni$_{0.5}$Mn$_{0.5}$ whereas ``Ni--Mn'' indicates an alloy of some composition Ni$_{x}$Mn$_{1-x}$.
+
+Be aware of the different meanings of the homophones ``affect'' (usually a verb) and ``effect'' (usually a noun), ``complement'' and ``compliment,'' ``discreet'' and ``discrete,'' ``principal'' (e.g., ``principal investigator'') and ``principle'' (e.g., ``principle of measurement''). Do not confuse ``imply'' and ``infer.''
+
+There is no period after the ``et'' in the Latin abbreviation ``\emph{et al.}'' (it is also italicized). The abbreviation ``i.e.,'' means ``that is,'' and the abbreviation ``e.g.,'' means ``for example'' (these abbreviations are not italicized).
+
+When citing a section in a book, please give the relevant page numbers. In text, refer simply to the reference number. Do not use ``Ref.'' or ``reference'' except at the beginning of a sentence: ``Reference \cite{b3} shows $\ldots$ .''
+
+Generally, this section provides an introduction and literature overview, aim of the work and research questions.
+\end{comment}
+%-------------------------------------------------------------------------------------------------------------

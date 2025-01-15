@@ -1,0 +1,111 @@
+\section*{Appendix}
+%-------------------------------------------------------------------------------------------------------------
+% BCI Requirements
+
+\begin{comment}
+\subsection{BCI Requirements}
+\textcolor{violet}{The complete requirements for the BCI system:
+\begin{enumerate}
+    \item EEG
+    \begin{enumerate}
+        \item Record signal
+        \begin{enumerate}
+            \item Time stamp signal
+        \end{enumerate}
+        \item Stream signal to a PC
+        \begin{enumerate}
+            \item Store for offline analysis
+            \item Display data lost/drop
+            \item Display data quality
+            \item Visualize signal
+        \end{enumerate}
+        \item Filter signal (reduce noise and artifacts)
+        \item Apply feature extraction on the signal
+        \item Use AI to decode navigation variables from signal
+        \begin{enumerate}
+            \item Display decoding accuracies
+        \end{enumerate}
+    \end{enumerate}
+    \item EMG
+    \begin{enumerate}
+        \item Record signal
+        \begin{enumerate}
+            \item Time stamp signal
+        \end{enumerate}
+        \item Stream signal to a PC
+        \begin{enumerate}
+            \item Store for offline analysis
+            \item Display data loss
+            \item Display data quality
+            \item Visualize signal
+        \end{enumerate}
+        \item Filter signal (reduce noise and artifacts)
+        \item Apply feature extraction on the signal
+        \item Use AI to decode navigation variables from signal
+        \begin{enumerate}
+            \item Display decoding accuracies
+        \end{enumerate}
+    \end{enumerate}
+    \item Control a Turtlebot3 in Gazebo
+    \begin{enumerate}
+        \item Using ROS2
+        \item Based on EEG
+        \begin{enumerate}
+            \item No physical movements allowed during control with EEG
+            \item Drive
+            \item Do not drive
+        \end{enumerate}
+        \item Based on EMG
+        \begin{enumerate}
+            \item Turn left
+            \item Turn right
+        \end{enumerate}
+    \end{enumerate}
+    \item System should work for various users
+    \item System should work in real-time (online) with 1s deadline
+    \item Display time delay (response time) from obtaining signal to controlling the Turtlebot3
+    \item validate BCI system using a statistical measure
+\end{enumerate}}
+\end{comment}
+
+%-------------------------------------------------------------------------------------------------------------
+% Abbreviations and Terms
+
+\begin{comment}
+\subsection{Abbreviations and Terms}
+\textcolor{violet}{
+\begin{itemize}
+    \item Real-time: this study uses real-time and online interchangeably to mean anything below $1\:\text{s}$ deadline (except when citing other papers).
+    %\item Online: this study uses real-time and online interchangeably to mean anything below $1\:\text{s}$ deadline (except when citing other papers).
+\end{itemize}
+}
+\end{comment}
+
+%-------------------------------------------------------------------------------------------------------------
+% Equations
+
+\begin{comment}
+\subsection{Equations}
+\textcolor{violet}{The equation shown in\:\eqref{eq:p_value_original} is taken from\:\cite{ojalaPermutationTestsStudying2009}.
+\begin{dmath}
+    \label{eq:p_value_original}
+    p = \frac{|\{D'\in\hat{D}: e(f,D') \le e(f,D)\}|+1}{k+1}
+\end{dmath}}
+
+\textcolor{violet}{The equation shown in\:\eqref{eq:binomial_inverse} is taken from\:\cite{ganzPermutationTestsClassification2017}.
+\begin{equation}
+    \begin{split}
+    \label{eq:binomial_inverse}   
+    p_{binom} = \sum_{\epsilon = 0}^{N_0} \binom{M}{\epsilon} Pr(c(x) = 0)^\epsilon Pr(c(x) = 1)^{M-\epsilon}
+    \end{split}
+\end{equation}}
+\end{comment}
+
+%-------------------------------------------------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------------------------------------------------
+\begin{comment}
+    Appear before acknowledgment    
+\end{comment}
+%-------------------------------------------------------------------------------------------------------------

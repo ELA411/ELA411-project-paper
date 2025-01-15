@@ -1,0 +1,77 @@
+\documentclass[9pt,shortpaper,twoside,web]{ieeecolor}
+
+%-------------------------------------------------------------------------------------------------------------
+% So we can comment out stuff
+\usepackage{comment}
+\usepackage{cite}
+% for confusion matrix
+\usepackage[table]{xcolor}
+\usepackage{collcell}
+\usepackage{hhline}
+\usepackage{pgf}
+\usepackage{multirow}
+% Color text
+\usepackage{xcolor}
+% Hyper refs
+\usepackage{hyperref}
+% Long equations
+\usepackage{breqn}
+\usepackage{amsmath}
+% Degree sign
+\usepackage{gensymb}
+% Sub figures
+\usepackage{caption}
+\usepackage{subcaption}
+%-------------------------------------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------------------------------------
+% DO NOT TOUCH!
+% Packages for template 
+\usepackage{generic}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+% No clue
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\markboth{\journalname, VOL. XX, NO. XX, XXXX 2024}
+{Eriksson \MakeLowercase{\textit{et al.}}: Preparation of Brief Papers for IEEE TRANSACTIONS and JOURNALS (January 2024)}
+%-------------------------------------------------------------------------------------------------------------
+\begin{document}
+
+\title{Hybrid BCI controlled Turtlebot3 using EEG and EMG}
+
+\author{{First A. \textcolor{olive}{Viktor Eriksson}, Second B. \textcolor{violet}{Carl Larsson}, and Third C. \textcolor{teal}{Pontus Svensson}}
+	% Date when paper was submitted for review
+	% Support, sponsor and financial support 
+	\thanks{Submitted for review January 12th 2024.}
+	% Affiliations, address and email
+	\thanks{F. A. Viktor Eriksson is with the School of Innovation, Design and Engineering, Mälardalens University, Västerås, 722 20 Sweden (e-mail: ven20002@student.mdu.se). }
+	\thanks{S. B. Carl Larsson is with the School of Innovation, Design and Engineering, Mälardalens University, Västerås, 722 20 Sweden (e-mail: cln20001@student.mdu.se). }
+	\thanks{T. C. Pontus Svensson is with the School of Innovation, Design and Engineering, Mälardalens University, Västerås, 722 20 Sweden (e-mail: psn19003@student.mdu.se).}}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/keywords}
+\input{sections/introduction}
+\input{sections/method}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+% Appendix should be before ackowledgment
+%\input{sections/appendix}
+%\input{sections/acknowledgment}
+% Authors contribution needs to be included
+\input{sections/author_contribution}
+
+% Select the IEEEtran style
+\bibliographystyle{IEEEtran}
+% Include bibography file
+\bibliography{ELA411}
+
+\end{document}
+%-------------------------------------------------------------------------------------------------------------

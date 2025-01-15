@@ -1,0 +1,162 @@
+\section{Introduction}
+%-------------------------------------------------------------------------------------------------------------
+% Carl violet
+\textcolor{violet}{This study covers the online control of a Turtlebot3 using a hybrid BCI. A hybrid BCI is a BCI that uses more than one form of communication (with at least one originating from the brain)\cite{leebHybridBrainComputer2011}\cite{hongHybridBrainComputer2017}. The hybrid BCI will use both EEG and EMG. EEG will be used to control drive forward and do not drive commands. EMG will be used to control left turn and right turn commands. The control of the Turtlebot3 will be built using ROS2 and will be simulated in Gazebo.}
+
+\textcolor{violet}{sample rate 512hz, band pass filter filter 0.1 to 100hz, EEG electrodes placed over motor cortex, 25\% overlap 500ms window, Gaussian classifier, EMG electrodes placed upper and lower forearm both sides \cite{leebHybridBrainComputer2011}}
+
+\textcolor{violet}{It is very common to use EMG to reduce artifacts in EEG\cite{hongHybridBrainComputer2017}. EEG data is usually down sampled \cite{hongHybridBrainComputer2017}. Independent component analysis (ICA), genetic algorithm (GA), and particle swarm optimization are techniques that have been proposed for eye movement artifact removal from EEG signals \cite{hongHybridBrainComputer2017}. LDA and SVM classifier are commonly used for EEG with window size typically below 1s\cite{hongHybridBrainComputer2017}. }
+
+\textcolor{violet}{EMG electrodes (eight) placed on the forearm (upper, towards the elbow) for arm movements, impedance below 20k, sampled at 200hz \cite{zhangEEGEMGEOGBased2019}. EEG electrodes placed according to 10–20 international system (A2 as reference, forehead is ground), electrode impedance below 5k \cite{zhangEEGEMGEOGBased2019}. EEG sampled at 500Hz \cite{zhangEEGEMGEOGBased2019}. Remove power line 50hz noise with notch filter \cite{zhangEEGEMGEOGBased2019}. Remove DC component and baseline drift from EEG \cite{zhangEEGEMGEOGBased2019}. EEG is filtered using a zero-phase FIR bandpass filter with cut off frequency 0.05-45 Hz \cite{zhangEEGEMGEOGBased2019}. Feature extraction for EEG: Daubechies Wavelet at 5 Levels using db4 Mother Wavelet, Difference between Mean Values of C3 and C4 Channels,  \cite{zhangEEGEMGEOGBased2019}. SVM classifier is used for EEG \cite{zhangEEGEMGEOGBased2019}. Feature extraction for EMG: mean absolute value, waveform length, zero crossing, slope sign change and mean absolute value slope \cite{zhangEEGEMGEOGBased2019}.}
+
+\textcolor{violet}{EEG reference electrode was placed at FPz, EEG electrodes for recording Alpha-band signals were located at Pz, Fz \cite{minatiHybridControlVisionGuided2016}. The difference between the Pz and the Fz electrodes was filtered with a bandpass 8-12Hz (alpha-band) 250 order FIR filter \cite{minatiHybridControlVisionGuided2016}    }
+
+\textcolor{violet}{BCI (brain computer interface) allows for control of a computer and interaction with external devices through the use of EEG \cite{fouadBrainComputerInterface2015}. EEG is considered the only practical non invasive option for obtaining neurological signals in real time for BCI \cite{fouadBrainComputerInterface2015}. The 10–20 system is a common choice for EEG electrode placement \cite{fouadBrainComputerInterface2015}. EOG and EMG are significant artifact sources in EEG \cite{fouadBrainComputerInterface2015}\cite{islamSignalArtifactsTechniques2021}. Some features extraction methods used for EEG are: amplitude values of EEG signals, Band Powers (BP), Power Spectral Density (PSD) values, AutoRegressive (AR) and Adaptive AutoRegressive (AAR) parameters \cite{fouadBrainComputerInterface2015}. LDA, ICA and GA have shown promise as dimension reduction techniques in BCI systems \cite{fouadBrainComputerInterface2015}. LDA (very successfully, good for online), linear SVM (very successfully), RBF SVM (very successfully) are common classifiers for EEG \cite{fouadBrainComputerInterface2015}.       }
+
+\textcolor{violet}{MI is connected with ERD\cite{gordleevaRealTimeEEGEMG2020}, thus imagining performing a certain movement can cause a certain drop and thus pattern in the EEG which can be measured and used by a classifier to learn to recognize that MI. Foot MI are more difficult to classify than hand MI \cite{gordleevaRealTimeEEGEMG2020}. EEG classifier: LDA \cite{gordleevaRealTimeEEGEMG2020}. EEG sampling rate 500Hz\cite{gordleevaRealTimeEEGEMG2020}. resistance of EEG electrodes below 10kohm \cite{gordleevaRealTimeEEGEMG2020}. notch filter to remove 50Hz power line noise \cite{gordleevaRealTimeEEGEMG2020}. bandpass filter 8-15hz and 10-300hz \cite{gordleevaRealTimeEEGEMG2020}. Feature extraction: RMS and common spatial pattern (CSP) filter\cite{gordleevaRealTimeEEGEMG2020}. reference electrode placed on earlobe (right), ground placed on forehead \cite{gordleevaRealTimeEEGEMG2020}.   }
+
+\textcolor{violet}{EMG frequency range of interest 20-1000hz \cite{islamSignalArtifactsTechniques2021}. EEG frequency range of interest 0.05-128hz \cite{islamSignalArtifactsTechniques2021}. Noise: white noise, baseline wandering, $1/f^\alpha$ noise ($\alpha \in 1,2,3$), power line noise (50hz+harmonics, proper grounding required), electrode offset \cite{islamSignalArtifactsTechniques2021}. artifacts: ocular, muscle, cardiac (ECG and pulse artifacts), respiration, sweat, electrodes (loose, movement etc) \cite{islamSignalArtifactsTechniques2021}. Windowing/segmentation/epoching less than 1s \cite{islamSignalArtifactsTechniques2021}. Average of all electrodes chosen as reference\cite{islamSignalArtifactsTechniques2021}. dc offset removal: remove mean value of signal from signal\cite{islamSignalArtifactsTechniques2021}. power line noise removal: 50 hz, 3rd or 4th order IIR notch filter (remove 50hz and second and third harmonic) and proper grounding\cite{islamSignalArtifactsTechniques2021}. It's common to use DWT for removing artifacts (larger coefficients = artifacts, small coefficients = EEG), ICA, and specifically Wavelet-BSS (W-ICA) \cite{islamSignalArtifactsTechniques2021}. MI frequency band of interest 8-32hz \cite{islamSignalArtifactsTechniques2021}.  }
+
+\textcolor{violet}{(Fully Online and automated artifact Removal for brain-Computer interfacing (FORCe): 1 second windows $\rightarrow$ wavelet decomposition (DWT, motherwavelet Symlet 4 “Sym4”) to decompose each EEG channel into approximation and detail coefficients $\rightarrow$ Group all coefficients at the same decomposition level $\rightarrow$ ICA (find demixing matrix using the approximation coefficients, second order blind identification (SOBI) method) $\rightarrow$ approximation coefficients are multiplied by demixing matrix $\rightarrow$ soft threshold (if 3 are exceeded, then it is considered an artifact and is removed) \cite{dalyFORCeFullyOnline2015}}
+
+\textcolor{violet}{For recognizing hand and wrist movements, EMG electrodes have typically been placed around the forearm \cite{farinaExtractionNeuralInformation2014}. }
+
+\textcolor{violet}{EMG electrodes place on forearm for hand and wrist movements \cite{vidovicImprovingRobustnessMyoelectric2016}. Training set should contain data with movement of different contraction (force) levels \cite{vidovicImprovingRobustnessMyoelectric2016}. 20-450Hz bandpass filter, 50hz notch filter \cite{vidovicImprovingRobustnessMyoelectric2016}. sample rate of 1khz \cite{vidovicImprovingRobustnessMyoelectric2016}. 250ms window with 50ms overlap, and feature extraction: logarithm of the signal variance (logVar), classifier: LDA (more robust), QDA, adapting the parameters towards the parameters of new observations have shown promise \cite{vidovicImprovingRobustnessMyoelectric2016}.     }
+
+\textcolor{violet}{interelectrode distance (distance between two electrode poles) for EMG should be less than 2cm to minimize muscle cross talk \cite{youngImprovingMyoelectricPattern2012}. LDA performed well in the presence of electrode shift, time-domain feature extraction have shown good real time performance, autoregressive (AR) feature extraction have also been promising \cite{youngImprovingMyoelectricPattern2012}. reference electrode placed on elbow, each movement held for 4s, 1khz sample rate, 250ms and 50ms overlap, 20Hz highpass filter, TD and AR feature extraction, LDA classifier, Interelectrode distance 4 cm has shown to give lower classification errors, more resistant to electrode shift, faster completion time and lower failure rates \cite{youngImprovingMyoelectricPattern2012}. When more than two channels are used, one should be placed longitudinally and the other transverse to the muscle for best performance, the best performance was found for 4-6 channels \cite{youngImprovingMyoelectricPattern2012}. TDAR was found to be a good feature extraction method for EMG in terms of classification error when in the presence of electrode shift (however not significantly better than AR)\cite{youngImprovingMyoelectricPattern2012}.           }
+
+\textcolor{violet}{electrodes place around forearm (on flexor and extensor), reference on elbow (olecranon) \cite{youngClassificationSimultaneousMovements2013}. sampled at 1000hz, high pass 3rd order butterworth filter 20hz, 250ms window with 50ms overlap, TD: mean absolute value, zero crossing, number of slope sign changes, and waveform length \cite{youngClassificationSimultaneousMovements2013}. 3s contraction/hold \cite{youngClassificationSimultaneousMovements2013}. 4-6 channels has been found to be best, less than 4 has worse performance, more than 6 doesn't see a significant increase \cite{youngClassificationSimultaneousMovements2013}.        }
+
+\textcolor{violet}{emg electrodes place on forearm, 2cm center to center distance \cite{liQuantifyingPatternRecognition2010}. Bandpass filter 5-400hz, sampled at 1000hz, hold each movement for 4s, 150ms window with 50ms overlap, LDA, TD: mean absolute value, number of zero crossings, waveform length, and
+number of slope sign changes \cite{liQuantifyingPatternRecognition2010}. 4-6 channels has been found to have good performance while still minimizing the number of electrodes \cite{liQuantifyingPatternRecognition2010}.           }
+%-------------------------------------------------------------------------------------------------------------
+% Pontus teal
+% BMI Classification, Decoding
+\textcolor{teal}{
+	Lebedev et al. argues that the information that can be extracted, is not stored in individual neurons but rather an ensemble of several neurons. The literature review suggests that in order to decode the signal, the electrodes should measure ensembles of neurons from several places on the brain, simultaneously\cite{lebedevBrainMachineInterfacesBasic2017a}.
+}
+
+% Common spatial patterns
+\textcolor{teal}{
+	Common patterns used in mobile robots are SSVEP and P300\cite{aljalalComprehensiveReviewBraincontrolled2020}. The SSVEP requires a shorter time when issuing commands compared to the P300, but loses out in accuracy\cite{aljalalComprehensiveReviewBraincontrolled2020}.
+}
+
+% Common Spatial Patterns, Signal decomposition, feature extraction method
+\textcolor{teal}{
+	CSP is the technique where the data is transformed into a new space, where the variance of the classes are maximized, and the other is reduced. This technique is usually a good method because of the different frequency bands of the signal contains different information, with CSP the information in the different frequency bands can be extracted. But only using CSP is not recommended because the frequency bands are different depending on the individual\cite{padfieldEEGBasedBrainComputerInterfaces2019}. An optimization of which frequency bands to use, could increase the success of the classification accuracy\cite{padfieldEEGBasedBrainComputerInterfaces2019}.
+	CSSP, CSSSP, SBCSP, are derivatives of the CSP aimed to improve performance. Using CSSP, CSSSP, and SBCSP with LDA to decrease the dimensionality of the sub-bands was found to improve the classification accuracy, in comparison to only using CSSP, CSSSP, and SBCSP
+	\cite{oikonomouComparisonStudyEEG2017}.
+}
+
+\textcolor{teal}{Using CSP for signal decomposition is a good technique during motor imagery detection, that has several channels of data\cite{kevricComparisonSignalDecomposition2017}.}
+
+% Classification
+\textcolor{teal}{
+	The decoder should transform the input received from the neurons to a signal suitable for operations such as filtering, feature extraction and classification. There exists several types of decoders, linear decoders, Kalman filter, Artificial Neural Networks, Adaptive Decoders and Discrete classifiers.
+	In a comprehensive review on brain-controlled mobile robots by Aljalal \textit{et al.} suggests that after the feature extraction process several classifier algorithms could be implemented. They suggest using a linear classifier since it requires fewer parameters to be tuned, thus making it more robust and does not overfit the data as easily\cite{aljalalComprehensiveReviewBraincontrolled2020}. Depending on the features extracted, Linear Discriminant analysis (LDA), Support Vector machine (SVM), Artificial Neural Networks (ANN), Multilayer Perceptron (MLP), and K-Nearest Neighbor (KNN) should be considered for classification.
+}
+% Signal decomposition, Feature extraction time-domain
+\textcolor{teal}{
+	Feature extraction can be performed for Time-Domain, Frequency-Domain, and Time-Frequency domain. Common time-domain feature extraction methods are autoregressive (AR) modelling, Adaptive autoregressive (AAR) modelling, root-mean-square (RMS), and integrated EEG (IEEG)\cite{padfieldEEGBasedBrainComputerInterfaces2019}.
+}
+\textcolor{teal}{Autoregressive model is computationally efficient which makes it suitable for online systems, but a limitation is that it is sensitive to artifacts\cite{kevricComparisonSignalDecomposition2017}.}
+
+% Signal decomposition, Feature extraction frequency-domain
+\textcolor{teal}{
+	Frequency-Domain feature extraction commonly includes, Fast-Fourier Transform (FFT), (Welch's method is commonly used)\cite{padfieldEEGBasedBrainComputerInterfaces2019}.
+}
+% Signal decomposition, Time-Frequency Domain Techniques.
+\textcolor{teal}{
+	Techniques commonly used for Time-Frequency Domain feature extraction includes, short-time Fourier transform (STFT), wavelet transform (WT), and discrete wavelet transform (DWT)\cite{padfieldEEGBasedBrainComputerInterfaces2019}.
+}
+
+% Signal decomposition and classifying
+\textcolor{teal}{
+	In a study comparing signal decomposition methods, three different methods where reviewed. MSPCA used for noise removal in combination with  high order statistics, and several features extracted from the different wavelet packet decomposition bands yielded the highest accuracy when classifying\cite{kevricComparisonSignalDecomposition2017}.
+}
+%
+% NOTE, only 1 channel was used. They dont mention time to classify in real-time.
+\textcolor{teal}{In a study comparing right hand, left hand with and without the usage of MSPCA to de-noise the signal in real-time. WPD, continuoustime wavelet decomposition sampled at various frequencies at each scale level, leading to a better resolution for the sub-band frequencies. \textit{k} sub-band (wavelet-coefficients) in WPD will lead to $2^k$ features to be extracted. With more features the theory says that accuracy will increase, and was shown in the test\cite{kevric2015impact}. Mother wavelet used was the Daubechies4 (db4), number of decomposition levels was 4, which gives 16 sub-bands.
+}
+%
+\textcolor{teal}{
+	The PCA algorithm is applied to each of the 4 wavelet decompositions. They extracted 6 features from each sub-band resulting in $6\cdot 16 = 96$ features total extracted. Feature set, mean of coefficients (absolute values in every sub-band, $\mu$), Avergae power of the coefficients in every sub-band $\lambda$, Standard deviation of the coefficients, Ratio of the absolute mean values of coefficients, skewness of the coefficients, kurtosis of the coefficients. The rotation forest classifier resultet in an overall increase of $13.6$, from $78.9\% \: \text{to} \: 89.6\% $ accuracy, with and without MSPCA respectively\cite{kevric2015impact}.}
+%
+%-------------------------------------------------------------------------------------------------------------
+% Viktor green
+\textcolor{olive}{Motor imagery. The mental execution of a movement without any peripheral (muscle) activation. In recent studies, motor imagery has been used for either rehabilitation of muscle control, or for robotic movement. Mulder T\cite{mulderMotorImageryAction2007} specifies in a study how stroke patients were still able to activate the motor imagery without any muscle movement.
+	A visual presentation of the scalp topographic to detect the motor imagery, another study applied a Laplacian spatial filter to effectively eliminate the low-frequency components of the EEG signals\cite{tangSpatialFilterTemporal2024}. The output was an improved spatial resolution and enhanced signal-to-noise ratio.
+	2 datasets of EEG signals were used. The first dataset was achieved from 22 sensors, with a sample rate of 250 Hz, filtered from 0.5 - 100 Hz, with 9 participants. The other data set used 31 sensors, also sampling rate of 250 Hz, a 50 Hz notch filter for the elimination of the power line interference, and 5 participants.
+	Both data sets measured 5 motor imaginary gestures (both hands and feet and tongue).
+	From data set 2 a convolution network of two convolution layers and one average pooling layer received an accuracy of  82.75 \%. But for data set 1 only 67.79\%.
+	%snabb kollar andra rapporter
+	another study:
+	using 22 EEG electrodes with a sampling frequency of
+	250 Hz and were bandpass filtered between 0.5 Hz and 100 Hz, as well
+	as notch filtered at 50 Hz.
+	Two sessions were recorded on different days for each subject,
+	We select four sub-bands with 1 Hz overlap, which are u rhythm (1–5 Hz), b rhythm (4–8 Hz), q rhythm (7–13 Hz) and p rhythm (12–32 Hz) typ gamma, beta, delta signaler.
+	!Hitta inget om features!
+	%https://www.sciencedirect.com/science/article/pii/S1746809423004962
+	%artikel 2
+	%https://www.sciencedirect.com/science/article/pii/S0010482521000445
+	2...Steps for using EEG is typically in order pre-processing, feature extraction, domain reduction and classification.
+	The EEG signals were sampled at 173.61 Hz.
+	The bandpass filter (0.5 Hz–70 Hz).
+	features: Orthogonal Matching Pursuit och 'Discrete Wavelet Transform.
+	EEG bands, i.e., delta
+	(0.5–4 Hz), theta (4–8 Hz), alpha (8–13 Hz), beta (13–30 Hz), and
+	gamma (30–60 Hz)
+	top ten features, including fuzzy entropy, alphabet entropy, and DET of
+	different sub-bands, were selected as the best subset of the features. The
+	best set of the selected features contains DET (D1), ENTR (D3), Alphabet
+	(D1), Alphabet (D2), RR (D4), Alphabet (D5), FE (D3), FE (D2), FE (D5),
+	and RP (D3).
+	SVM classifier was used.
+	The SVM
+	classifier with the RBF kernel yields an accuracy of 91\%–100\%.
+	%report 3
+	%https://www.sciencedirect.com/science/article/pii/S0165027023001887
+	3...a support
+	vector machine (SVM) classifier, a commonly used algorithm in motor
+	imagery tasks, EEG signals were recorded via
+	22 electrodes with a sampling rate of 250 Hz and band-pass filtered
+	between 0.5 Hz and 100 Hz.
+	band-pass filtered
+	using a fifth-order Butterworth filter from 0.5 Hz to 30 Hz.
+	PSD features, men dom läste ut olika NODER/Punkter från eeg sensorerna some dom sen läste vilka some var aktiva och inte, och det var en typ av feature extraction.
+	%https://www.sciencedirect.com/science/article/pii/S0960077922011444
+	EKG:
+	effective frequency ranges from
+	10 to 500 Hz, not filter 50 Hz.
+	Features: Lyapunov exponent, Correlation dimension,Fractal dimension,
+	classifier: Support vector machine,
+	"SVM classifier with two features of mean CD and
+	FD classifies the data well in the two categories. accuracy of extracted features was 99.89 \%".
+	%https://www.mdpi.com/1424-8220/19/20/4596
+	dominant energy in the 20–450 Hz band.
+	\textbf{Window: 256 ms overlapping 32 ms	Features: TD, 6AR, RMS/PCA, ULDA	classifier: KNN, LDA 	Post-processing: Majority vote	Classes: 7/57	Accuracy around 97\%
+	}
+}
+%-------------------------------------------------------------------------------------------------------------
+\begin{comment}
+Avoid contractions, write ``do not'' instead of ``don't.''
+
+The word ``data'' is plural, not singular. The subscript for the permeability of vacuum $\mu _{0}$ is zero, not a lowercase letter ``o.'' The term for residual magnetization is ``remanence''; the adjective is ``remanent''; do not write ``remnance'' or ``remnant.'' Use the word ``micrometer'' instead of ``micron.'' A graph within a graph is an ``inset,'' not an ``insert.'' The word ``alternatively'' is preferred to the word ``alternately'' (unless you really mean something that alternates). Use the word ``whereas'' instead of ``while'' (unless you are referring to simultaneous events). Do not use the word ``essentially'' to mean ``approximately'' or ``effectively.'' Do not use the word ``issue'' as a euphemism for ``problem.'' When compositions are not specified, separate chemical symbols by en-dashes; for example, ``NiMn'' indicates the intermetallic compound Ni$_{0.5}$Mn$_{0.5}$ whereas ``Ni--Mn'' indicates an alloy of some composition Ni$_{x}$Mn$_{1-x}$.
+
+Be aware of the different meanings of the homophones ``affect'' (usually a verb) and ``effect'' (usually a noun), ``complement'' and ``compliment,'' ``discreet'' and ``discrete,'' ``principal'' (e.g., ``principal investigator'') and ``principle'' (e.g., ``principle of measurement''). Do not confuse ``imply'' and ``infer.''
+
+There is no period after the ``et'' in the Latin abbreviation ``\emph{et al.}'' (it is also italicized). The abbreviation ``i.e.,'' means ``that is,'' and the abbreviation ``e.g.,'' means ``for example'' (these abbreviations are not italicized).
+
+Format and save your graphics using a suitable graphics processing program that will allow you to create the images as PostScript (PS), Encapsulated PostScript (.EPS), Tagged Image File Format (.TIFF), Portable Document Format (.PDF), Portable Network Graphics (.PNG), or Metapost (.MPS), sizes them, and adjusts the resolution settings.
+!!!!When submitting your final paper, your graphics should all be submitted individually in one of these formats along with the manuscript.!!!!
+
+Figure axis labels are often a source of confusion. Use words rather than symbols. As an example, write the quantity ``Magnetization,'' or ``Magnetization M,'' not just ``M.'' Put units in parentheses. Do not label axes only with units. As in Fig. 1, for example, write ``Magnetization (A/m)'' or ``Magnetization (A$\cdot$m$^{-1}$),'' not just ``A/m.'' Do not label axes with a ratio of quantities and units. For example, write ``Temperature (K),'' not ``Temperature/K.''
+
+When referencing your figures and tables within your paper, use the abbreviation ``Fig.'' even at the beginning of a sentence. Do not abbreviate ``Table.'' Tables should be numbered with Roman Numerals.
+
+When citing a section in a book, please give the relevant page numbers. In text, refer simply to the reference number. Do not use ``Ref.'' or ``reference'' except at the beginning of a sentence: ``Reference \cite{b3} shows $\ldots$ .''
+
+Generally, this section provides an introduction and literature overview, aim of the work and research questions.
+\end{comment}
+%-------------------------------------------------------------------------------------------------------------
